@@ -52,6 +52,21 @@ for name, model in models.items():
     print("\nClassification Report:\n", classification_report(y_test, y_pred))
     print("="*50)
 
+# Step 7: Evaluate the model using cross-validation
+gnb = GaussianNB()
+gnb.fit(X_train, y_train)  # ✅ Train the model before predicting!
+
+cv_scores = cross_val_score(gnb, X, y, cv=5)
+print(f"Cross-Validation Accuracy (GaussianNB): {cv_scores.mean():.2f}")
+print(f"Expected number of features: {X_train.shape[1]}")
+
+# Now, prediction will work because the model is trained
+new_transaction = np.array([[2500, 1, 1, 0, 1, 2, 0, 1]])
+prediction = gnb.predict(new_transaction)
+
+fraud_label = label_encoder["fraud"].inverse_transform(prediction)[0]
+print(f"\nNew Transaction Classification: {fraud_label}")
+
 
 
 
